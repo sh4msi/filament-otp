@@ -87,14 +87,13 @@ class ConfirmOTP extends SimplePage
 
         if (
             $user instanceof FilamentUser &&
-            $user->canAccessPanel(Filament::getCurrentPanel())
+            !$user->canAccessPanel(Filament::getCurrentPanel())
         ) {
             Filament::auth()->logout();
             $this->throwFailureValidationException();
         }
 
         session()->regenerate();
-
         return app(LoginResponse::class);
     }
 
