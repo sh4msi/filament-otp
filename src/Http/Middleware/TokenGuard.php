@@ -14,9 +14,7 @@ class TokenGuard
      * if the user's session contains a token then we need to direct the user to the
      * token confirm route instead.
      * need to allow the user through to any login routes
-     *
      */
-
     public function handle(Request $request, Closure $next)
     {
         if (is_null($this->getTokenFromSession($request))) {
@@ -27,6 +25,7 @@ class TokenGuard
         if ($this->isTokenExpired($request)) {
             $this->clearToken($request);
             Filament::auth()->logout();
+
             return redirect('/');
         }
 
@@ -37,7 +36,6 @@ class TokenGuard
         return to_route('filament-otp.confirm');
     }
 
-
     private function getTokenFromSession(Request $request)
     {
         return $request->session()->get('token');
@@ -46,6 +44,7 @@ class TokenGuard
     private function isTokenExpired(Request $request): bool
     {
         $expiry = $request->session()->get('token_expiry');
+
         return $expiry < now()->timestamp;
     }
 
@@ -57,6 +56,6 @@ class TokenGuard
     private function isLoginRoute(Request $request): bool
     {
         return $request->route()->named('filament-otp.*');
-//        return $request->route()->named('filament.*.auth.login.*');
+        //        return $request->route()->named('filament.*.auth.login.*');
     }
 }

@@ -22,9 +22,6 @@ class TokenListener
 
     /**
      * Handle the event.
-     *
-     * @param object $event
-     * @return void
      */
     public function handle(object $event): void
     {
@@ -33,7 +30,7 @@ class TokenListener
 
         Session::put('token', $token);
         Session::put('token_expiry', now()->addMinutes($tokenExpiry)->timestamp);
-        
+
         $event->user->notifyOtpToken($token);
     }
 }

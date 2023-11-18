@@ -39,5 +39,4 @@ class FilamentOtpServiceProvider extends PackageServiceProvider
         Livewire::component('filament-otp.confirm', ConfirmOTP::class);
         Livewire::component('filament-otp.login-otp', LoginOTP::class);
     }
-
 }

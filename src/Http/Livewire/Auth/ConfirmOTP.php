@@ -35,8 +35,9 @@ class ConfirmOTP extends SimplePage
             redirect()->intended(Filament::getUrl());
         }
 
-        if (!session()->has('loginId')) {
+        if (! session()->has('loginId')) {
             to_route('filament.app.auth.login');
+
             return;
         }
 
@@ -47,7 +48,7 @@ class ConfirmOTP extends SimplePage
     {
         return [
             Grid::make([
-                'default' => 12
+                'default' => 12,
             ])
                 ->schema([
                     TextInput::make('token')
@@ -59,7 +60,7 @@ class ConfirmOTP extends SimplePage
 
                     FilamentView::make('filament-otp::livewire.resend-token')
                         ->visible(session()->has('token'))
-                        ->columnSpan(4)
+                        ->columnSpan(4),
                 ]),
         ];
     }
@@ -116,7 +117,7 @@ class ConfirmOTP extends SimplePage
 
     }
 
-    public function getTitle(): string|Htmlable
+    public function getTitle(): string | Htmlable
     {
         return __('filament-otp::filament-otp.confirm.heading');
     }
@@ -140,8 +141,10 @@ class ConfirmOTP extends SimplePage
                     'seconds' => $exception->secondsUntilAvailable,
                     'minutes' => ceil($exception->secondsUntilAvailable / 60),
                 ]))
-                ->body(array_key_exists('body',
-                    __('filament-panels::pages/auth/login.notifications.throttled') ?: [])
+                ->body(array_key_exists(
+                    'body',
+                    __('filament-panels::pages/auth/login.notifications.throttled') ?: []
+                )
                     ? __('filament-panels::pages/auth/login.notifications.throttled.body', [
                         'seconds' => $exception->secondsUntilAvailable,
                         'minutes' => ceil($exception->secondsUntilAvailable / 60),
@@ -175,8 +178,10 @@ class ConfirmOTP extends SimplePage
                     'seconds' => $exception->secondsUntilAvailable,
                     'minutes' => ceil($exception->secondsUntilAvailable / 60),
                 ]))
-                ->body(array_key_exists('body',
-                    __('filament-panels::pages/auth/login.notifications.throttled') ?: [])
+                ->body(array_key_exists(
+                    'body',
+                    __('filament-panels::pages/auth/login.notifications.throttled') ?: []
+                )
                     ? __('filament-panels::pages/auth/login.notifications.throttled.body', [
                         'seconds' => $exception->secondsUntilAvailable,
                         'minutes' => ceil($exception->secondsUntilAvailable / 60),
@@ -192,7 +197,6 @@ class ConfirmOTP extends SimplePage
             ]);
         }
     }
-
 
     private function dispatchCountdown(): void
     {

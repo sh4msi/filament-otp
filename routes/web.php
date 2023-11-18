@@ -4,7 +4,6 @@ use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
 use Sh4msi\FilamentOtp\Http\Middleware\TokenGuard;
 
-
 Route::name('filament-otp.')
     ->group(function () {
         foreach (Filament::getPanels() as $panel) {

@@ -50,5 +50,4 @@ class NotificationOTP extends Notification implements ShouldQueue
             ->line($this->token)
             ->line('Thank you for using our application!');
     }
-
 }

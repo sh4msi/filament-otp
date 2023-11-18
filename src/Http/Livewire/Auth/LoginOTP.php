@@ -45,7 +45,7 @@ class LoginOTP extends SimplePage
         session()->put('loginId', $data['loginId']);
         $user = app(FilamentOtp::class)->getUser();
 
-        if (!$user) {
+        if (! $user) {
             $this->throwFailureValidationException();
         }
 
@@ -73,12 +73,10 @@ class LoginOTP extends SimplePage
         ];
     }
 
-
     public function getTitle(): string | Htmlable
     {
         return __('filament-otp::filament-otp.login.heading');
     }
-
 
     // ------ private methods ------
 
@@ -99,8 +97,10 @@ class LoginOTP extends SimplePage
                     'seconds' => $exception->secondsUntilAvailable,
                     'minutes' => ceil($exception->secondsUntilAvailable / 60),
                 ]))
-                ->body(array_key_exists('body',
-                    __('filament-panels::pages/auth/login.notifications.throttled') ?: [])
+                ->body(array_key_exists(
+                    'body',
+                    __('filament-panels::pages/auth/login.notifications.throttled') ?: []
+                )
                     ? __('filament-panels::pages/auth/login.notifications.throttled.body', [
                         'seconds' => $exception->secondsUntilAvailable,
                         'minutes' => ceil($exception->secondsUntilAvailable / 60),

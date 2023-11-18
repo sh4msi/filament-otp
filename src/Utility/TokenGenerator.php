@@ -8,11 +8,11 @@ class TokenGenerator implements TokenGeneratorInterface
 {
     public function getToken($length = 5): string
     {
-        if(config('filament-otp.token_type') == 'number') {
+        if (config('filament-otp.token_type') == 'number') {
             return $this->generateRandomNumber($length);
         }
 
-        if(config('filament-otp.token_type') == 'etc') {
+        if (config('filament-otp.token_type') == 'etc') {
             return $this->generateRandomToken($length);
         }
 

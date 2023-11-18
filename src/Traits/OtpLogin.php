@@ -2,7 +2,6 @@
 
 namespace Sh4msi\FilamentOtp\Traits;
 
-
 trait OtpLogin
 {
     public function notifyOtpToken(string $token)
