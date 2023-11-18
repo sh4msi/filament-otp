@@ -46,7 +46,6 @@ return [
      */
     'rate_limit_decay_seconds' => 30,
 
-
     /**
      * Token generator class must implement TokenGeneratorInterface
      */
