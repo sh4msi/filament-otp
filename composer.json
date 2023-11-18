@@ -1,29 +1,27 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "sh4msi/filament-otp",
+    "description": "Filament OTP is a package for Filament that allows users to login with a One-Time Password. (OTP and Passwordless are similar, but they differ in some aspects!)",
     "keywords": [
-        ":vendor_name",
+        "sh4msi",
         "laravel",
-        ":package_slug"
+        "filament-otp"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/sh4msi/filament-otp",
     "support": {
-        "issues": "https://github.com/:vendor_slug/:package_slug/issues",
-        "source": "https://github.com/:vendor_slug/:package_slug"
+        "issues": "https://github.com/sh4msi/filament-otp/issues",
+        "source": "https://github.com/sh4msi/filament-otp"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Saeed Shamsi",
+            "email": "sh4msi@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.1",
         "filament/filament": "^3.0",
-        "filament/forms": "^3.0",
-        "filament/tables": "^3.0",
         "spatie/laravel-package-tools": "^1.15.0",
         "illuminate/contracts": "^10.0"
     },
@@ -42,13 +40,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Sh4msi\\FilamentOtp\\": "src/",
+            "Sh4msi\\FilamentOtp\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/"
+            "Sh4msi\\FilamentOtp\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -68,10 +66,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Sh4msi\\FilamentOtp\\FilamentOtpServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "FilamentOtp": "Sh4msi\\FilamentOtp\\Facades\\FilamentOtp"
             }
         }
     },

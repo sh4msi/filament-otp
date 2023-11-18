@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Sh4msi\FilamentOtp\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class FilamentOtpCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'filament-otp';
 
     public $description = 'My command';
 
