@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'login-btn-text' => 'Login without password',
+
     'login' => [
         'heading' => 'ورود با رمز یک بار مصرف',
 
