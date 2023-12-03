@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/sh4msi/filament-otp/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/sh4msi/filament-otp/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/sh4msi/filament-otp.svg?style=flat-square)](https://packagist.org/packages/sh4msi/filament-otp)
 
-Filament OTP is a package for Filament3 that allows users to login with a One-Time Password.
+Filament OTP is a package for **Filament 3** that allows users to login with a One-Time Password.
 (OTP and Passwordless are similar, but they differ in some aspects!)
 
 ## Installation
@@ -112,7 +112,23 @@ class User extends Authenticatable
 }
 ```
 
-call by route
+You can use the renderHook() method in the panel configuration object to display the "login with one-time password" button on the login page.
+```php
+use Filament\Panel;
+use Illuminate\Contracts\View\View;
+ 
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->renderHook(
+            'panels::auth.login.form.after',
+            fn (): View => View('filament-otp::livewire.login-otp-btn'),
+        )
+}
+```
+
+OR call by route
 ```php
 route('filament-otp.login')
 ```
