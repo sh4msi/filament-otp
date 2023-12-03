@@ -21,7 +21,7 @@ class LoginOTP extends SimplePage
 {
     use WithRateLimiting;
 
-    protected static string $view = 'filament-otp::livewire.login';
+    protected static string $view = 'filament-otp::livewire.login-otp';
 
     public $loginId = '';
 
