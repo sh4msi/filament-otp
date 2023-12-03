@@ -18,7 +18,7 @@ return [
     /**
      * token resend countdown time
      */
-    'resent_token_countdown_time' => 20,
+    'resent_token_countdown_time' => 120,
 
     /**
      * token count
