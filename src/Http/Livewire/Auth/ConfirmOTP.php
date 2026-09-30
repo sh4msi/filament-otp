@@ -50,6 +50,7 @@ class ConfirmOTP extends SimplePage
             Grid::make([
                 'default' => 12,
             ])
+                ->columnSpanFull()
                 ->schema([
                     TextInput::make('token')
                         ->label(__('filament-otp::filament-otp.confirm.fields.token.label'))
