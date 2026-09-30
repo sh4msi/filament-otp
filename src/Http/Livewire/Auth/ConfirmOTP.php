@@ -25,7 +25,7 @@ class ConfirmOTP extends SimplePage
 {
     use WithRateLimiting;
 
-    protected static string $view = 'filament-otp::livewire.confirm-otp';
+    protected string $view = 'filament-otp::livewire.confirm-otp';
 
     public $token = '';
 
