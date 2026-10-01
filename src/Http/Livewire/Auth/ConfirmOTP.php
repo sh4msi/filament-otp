@@ -145,17 +145,17 @@ class ConfirmOTP extends SimplePage
                 config('filament-otp.rate_limit_decay_seconds', 60)
             );
         } catch (TooManyRequestsException $exception) {
+            $throttledKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.notifications.throttled.title')
+                ? 'filament-panels::auth/pages/login.notifications.throttled'
+                : 'filament-panels::pages/auth/login.notifications.throttled';
 
             Notification::make()
-                ->title(__('filament-panels::pages/auth/login.notifications.throttled.title', [
+                ->title(__("{$throttledKey}.title", [
                     'seconds' => $exception->secondsUntilAvailable,
                     'minutes' => ceil($exception->secondsUntilAvailable / 60),
                 ]))
-                ->body(array_key_exists(
-                    'body',
-                    __('filament-panels::pages/auth/login.notifications.throttled') ?: []
-                )
-                    ? __('filament-panels::pages/auth/login.notifications.throttled.body', [
+                ->body(array_key_exists('body', __($throttledKey) ?: [])
+                    ? __("{$throttledKey}.body", [
                         'seconds' => $exception->secondsUntilAvailable,
                         'minutes' => ceil($exception->secondsUntilAvailable / 60),
                     ]) : null)
@@ -163,7 +163,7 @@ class ConfirmOTP extends SimplePage
                 ->send();
 
             throw ValidationException::withMessages([
-                'token' => __('filament-panels::pages/auth/login.notifications.throttled.title', [
+                'token' => __("{$throttledKey}.title", [
                     'seconds' => $exception->secondsUntilAvailable,
                     'minutes' => ceil($exception->secondsUntilAvailable / 60),
                 ]),
@@ -182,17 +182,21 @@ class ConfirmOTP extends SimplePage
                 config('filament-otp.rate_limit_decay_seconds', 60)
             );
         } catch (TooManyRequestsException $exception) {
+            $throttledBodyKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.notifications.throttled.body')
+                ? 'filament-panels::auth/pages/login.notifications.throttled.body'
+                : 'filament-panels::pages/auth/login.notifications.throttled.body';
+
+            $throttledKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.notifications.throttled')
+                ? 'filament-panels::auth/pages/login.notifications.throttled'
+                : 'filament-panels::pages/auth/login.notifications.throttled';
 
             Notification::make()
                 ->title(__('filament-otp::filament-otp.confirm.messages.throttled', [
                     'seconds' => $exception->secondsUntilAvailable,
                     'minutes' => ceil($exception->secondsUntilAvailable / 60),
                 ]))
-                ->body(array_key_exists(
-                    'body',
-                    __('filament-panels::pages/auth/login.notifications.throttled') ?: []
-                )
-                    ? __('filament-panels::pages/auth/login.notifications.throttled.body', [
+                ->body(array_key_exists('body', __($throttledKey) ?: [])
+                    ? __($throttledBodyKey, [
                         'seconds' => $exception->secondsUntilAvailable,
                         'minutes' => ceil($exception->secondsUntilAvailable / 60),
                     ]) : null)
@@ -252,8 +256,12 @@ class ConfirmOTP extends SimplePage
      */
     private function throwFailureValidationException()
     {
+        $failedKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.messages.failed')
+            ? 'filament-panels::auth/pages/login.messages.failed'
+            : 'filament-panels::pages/auth/login.messages.failed';
+
         throw ValidationException::withMessages([
-            'loginId' => __('filament-panels::pages/auth/login.messages.failed'),
+            'loginId' => __($failedKey),
         ]);
     }
 }
