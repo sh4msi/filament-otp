@@ -5,9 +5,7 @@ namespace Sh4msi\FilamentOtp\Http\Livewire\Auth;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\View as FilamentView;
 use Filament\Forms\Form;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Filament\Models\Contracts\FilamentUser;
@@ -21,8 +19,10 @@ use Sh4msi\FilamentOtp\FilamentOtp;
 /**
  * @property Form $form
  */
+#[\AllowDynamicProperties]
 class ConfirmOTP extends SimplePage
 {
+    use \Filament\Forms\Concerns\InteractsWithForms;
     use WithRateLimiting;
 
     protected string $view = 'filament-otp::livewire.confirm-otp';
@@ -46,8 +46,16 @@ class ConfirmOTP extends SimplePage
 
     protected function getFormSchema(): array
     {
+        $gridClass = class_exists(\Filament\Schemas\Components\Grid::class)
+            ? \Filament\Schemas\Components\Grid::class
+            : 'Filament\Forms\Components\Grid';
+
+        $viewClass = class_exists(\Filament\Schemas\Components\View::class)
+            ? \Filament\Schemas\Components\View::class
+            : 'Filament\Forms\Components\View';
+
         return [
-            Grid::make([
+            $gridClass::make([
                 'default' => 12,
             ])
                 ->columnSpanFull()
@@ -59,7 +67,7 @@ class ConfirmOTP extends SimplePage
                         ->numeric(config('filament-otp.token_type') == 'numeric')
                         ->length(config('filament-otp.token_count')),
 
-                    FilamentView::make('filament-otp::livewire.resend-token')
+                    $viewClass::make('filament-otp::livewire.resend-token')
                         ->visible(session()->has('token'))
                         ->columnSpan(4),
                 ]),

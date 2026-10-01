@@ -17,8 +17,10 @@ use Sh4msi\FilamentOtp\FilamentOtp;
 /**
  * @property Form $form
  */
+#[\AllowDynamicProperties]
 class LoginOTP extends SimplePage
 {
+    use \Filament\Forms\Concerns\InteractsWithForms;
     use WithRateLimiting;
 
     protected string $view = 'filament-otp::livewire.login-otp';
