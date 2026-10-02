@@ -14,7 +14,7 @@ class FilamentOtp
         $this->model = config('filament-otp.user_model');
     }
 
-    public function getUser(string $loginId = null): ?Model
+    public function getUser(?string $loginId = null): ?Model
     {
         $loginId = $loginId ?: Session::get('loginId');
 

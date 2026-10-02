@@ -1,12 +1,18 @@
 <?php
 
+use App\Models\User;
+use Sh4msi\FilamentOtp\Http\Livewire\Auth\ConfirmOTP;
+use Sh4msi\FilamentOtp\Http\Livewire\Auth\LoginOTP;
+use Sh4msi\FilamentOtp\Notifications\NotificationOTP;
+use Sh4msi\FilamentOtp\Utility\TokenGenerator;
+
 // config for Sh4msi/FilamentOtp
 
 return [
     /**
      * The authentication model to use.
      */
-    'user_model' => \App\Models\User::class,
+    'user_model' => User::class,
 
     /**
      * login columns
@@ -23,7 +29,7 @@ return [
     /**
      * token count
      */
-    'token_count' => 5,
+    'token_count' => 6,
 
     /**
      * token type
@@ -49,20 +55,20 @@ return [
     /**
      * Token generator class must implement TokenGeneratorInterface
      */
-    'token_generator' => \Sh4msi\FilamentOtp\Utility\TokenGenerator::class,
+    'token_generator' => TokenGenerator::class,
 
     /**
      * Token notification class
      */
-    'token_notification' => \Sh4msi\FilamentOtp\Notifications\NotificationOTP::class,
+    'token_notification' => NotificationOTP::class,
 
     /**
      * Login confirmation page component
      *
      * If you want to change something, place your component here.
      */
-    'confirm_token_component' => \Sh4msi\FilamentOtp\Http\Livewire\Auth\ConfirmOTP::class,
+    'confirm_token_component' => ConfirmOTP::class,
 
-    'login_otp_component' => \Sh4msi\FilamentOtp\Http\Livewire\Auth\LoginOTP::class,
+    'login_otp_component' => LoginOTP::class,
 
 ];

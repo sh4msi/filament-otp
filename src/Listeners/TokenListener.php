@@ -4,11 +4,11 @@ namespace Sh4msi\FilamentOtp\Listeners;
 
 use Illuminate\Support\Facades\Session;
 use Sh4msi\FilamentOtp\FilamentOtp;
-use Sh4msi\FilamentOtp\Utility\TokenGenerator;
+use Sh4msi\FilamentOtp\interface\TokenGeneratorInterface;
 
 class TokenListener
 {
-    protected TokenGenerator $generator;
+    protected TokenGeneratorInterface $generator;
 
     /**
      * Create the event listener.

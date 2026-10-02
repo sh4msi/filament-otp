@@ -5,20 +5,23 @@ namespace Sh4msi\FilamentOtp\Tests;
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
+use Filament\Facades\Filament;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
 use Filament\Infolists\InfolistsServiceProvider;
 use Filament\Notifications\NotificationsServiceProvider;
-use Filament\SpatieLaravelSettingsPluginServiceProvider;
-use Filament\SpatieLaravelTranslatablePluginServiceProvider;
+use Filament\Schemas\SchemasServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Sh4msi\FilamentOtp\FilamentOtpServiceProvider;
+use Sh4msi\FilamentOtp\Tests\Fixtures\TestPanelProvider;
+use Sh4msi\FilamentOtp\Tests\Fixtures\User;
 
 class TestCase extends Orchestra
 {
@@ -26,14 +29,14 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Sh4msi\\FilamentOtp\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
-        );
+        Filament::setCurrentPanel(Filament::getPanel('app'));
+
+        $this->setUpDatabase();
     }
 
     protected function getPackageProviders($app)
     {
-        return [
+        $providers = [
             ActionsServiceProvider::class,
             BladeCaptureDirectiveServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
@@ -43,22 +46,43 @@ class TestCase extends Orchestra
             InfolistsServiceProvider::class,
             LivewireServiceProvider::class,
             NotificationsServiceProvider::class,
-            SpatieLaravelSettingsPluginServiceProvider::class,
-            SpatieLaravelTranslatablePluginServiceProvider::class,
             SupportServiceProvider::class,
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
+            TestPanelProvider::class,
             FilamentOtpServiceProvider::class,
         ];
+
+        if (class_exists(SchemasServiceProvider::class)) {
+            $providers[] = SchemasServiceProvider::class;
+        }
+
+        return $providers;
     }
 
     public function getEnvironmentSetUp($app)
     {
+        config()->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
         config()->set('database.default', 'testing');
+        config()->set('database.connections.testing', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_filament-otp_table.php.stub';
-        $migration->up();
-        */
+        config()->set('filament-otp.user_model', User::class);
+    }
+
+    protected function setUpDatabase(): void
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->string('email')->unique();
+            $table->string('phone')->nullable();
+            $table->string('password')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+        });
     }
 }

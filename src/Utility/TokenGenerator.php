@@ -6,46 +6,55 @@ use Sh4msi\FilamentOtp\interface\TokenGeneratorInterface;
 
 class TokenGenerator implements TokenGeneratorInterface
 {
-    public function getToken($length = 5): string
+    public function getToken(int $length = 5): string
     {
-        if (config('filament-otp.token_type') == 'number') {
+        $length = max(1, $length);
+
+        if (config('filament-otp.token_type') === 'number') {
             return $this->generateRandomNumber($length);
         }
 
-        if (config('filament-otp.token_type') == 'etc') {
+        if (config('filament-otp.token_type') === 'etc') {
             return $this->generateRandomToken($length);
         }
 
         return $this->generateRandomAlphabet($length);
     }
 
-    private function generateRandomAlphabet($length): string
+    private function generateRandomAlphabet(int $length): string
     {
         $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = substr(str_shuffle($characters), 0, $length);
+        $max = strlen($characters) - 1;
+        $result = '';
 
-        $alphabetLength = strlen($randomString);
-        if ($alphabetLength < $length) {
-            $randomString .= $this->generateRandomAlphabet($length - $alphabetLength);
+        for ($i = 0; $i < $length; $i++) {
+            $result .= $characters[random_int(0, $max)];
         }
 
-        return $randomString;
+        return $result;
     }
 
-    private function generateRandomNumber($length): string
+    private function generateRandomNumber(int $length): string
     {
-        $min = pow(10, $length - 1);
-        $max = pow(10, $length) - 1;
+        $result = '';
 
-        return (string) mt_rand($min, $max);
+        for ($i = 0; $i < $length; $i++) {
+            $result .= (string) random_int(0, 9);
+        }
+
+        return $result;
     }
 
-    private function generateRandomToken($length): string
+    private function generateRandomToken(int $length): string
     {
-        $length = ceil($length / 2);
-        $token = $this->generateRandomAlphabet($length);
-        $token .= $this->generateRandomNumber($length);
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $max = strlen($characters) - 1;
+        $result = '';
 
-        return substr(str_shuffle($token), 0, $length);
+        for ($i = 0; $i < $length; $i++) {
+            $result .= $characters[random_int(0, $max)];
+        }
+
+        return $result;
     }
 }

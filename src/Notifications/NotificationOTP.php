@@ -38,13 +38,13 @@ class NotificationOTP extends Notification implements ShouldQueue
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toMail($notifiable)
     {
-        $tokenExpiry = config('filament-otp.token-expiry');
+        $tokenExpiry = config('filament-otp.token_expiry') ?? config('filament-otp.token-expiry', 15);
 
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject('Your login code for ' . config('app.name'))
             ->line("Here is your login Token which is valid for the next $tokenExpiry minutes")
             ->line($this->token)

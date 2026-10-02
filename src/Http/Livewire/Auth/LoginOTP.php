@@ -6,10 +6,12 @@ use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\SimplePage;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
 use Sh4msi\FilamentOtp\Events\TokenSent;
 use Sh4msi\FilamentOtp\FilamentOtp;
@@ -20,7 +22,7 @@ use Sh4msi\FilamentOtp\FilamentOtp;
 #[\AllowDynamicProperties]
 class LoginOTP extends SimplePage
 {
-    use \Filament\Forms\Concerns\InteractsWithForms;
+    use InteractsWithForms;
     use WithRateLimiting;
 
     protected string $view = 'filament-otp::livewire.login-otp';
@@ -93,7 +95,7 @@ class LoginOTP extends SimplePage
                 config('filament-otp.rate_limit_decay_seconds', 60)
             );
         } catch (TooManyRequestsException $exception) {
-            $throttledKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.notifications.throttled.title')
+            $throttledKey = Lang::has('filament-panels::auth/pages/login.notifications.throttled.title')
                 ? 'filament-panels::auth/pages/login.notifications.throttled'
                 : 'filament-panels::pages/auth/login.notifications.throttled';
 
@@ -124,7 +126,7 @@ class LoginOTP extends SimplePage
      */
     private function throwFailureValidationException()
     {
-        $failedKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.messages.failed')
+        $failedKey = Lang::has('filament-panels::auth/pages/login.messages.failed')
             ? 'filament-panels::auth/pages/login.messages.failed'
             : 'filament-panels::pages/auth/login.messages.failed';
 

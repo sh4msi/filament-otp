@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/sh4msi/filament-otp/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/sh4msi/filament-otp/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/sh4msi/filament-otp.svg?style=flat-square)](https://packagist.org/packages/sh4msi/filament-otp)
 
-Filament OTP is a package for **Filament 3** that allows users to login with a One-Time Password.
+Filament OTP is a package for **Filament 3 & 4** that allows users to login with a One-Time Password.
 (OTP and Passwordless are similar, but they differ in some aspects!)
 
 ## Installation
@@ -52,7 +52,7 @@ return [
     /**
      * token count
      */
-    'token_count' => 5,
+    'token_count' => 6,
 
     /**
      * token type

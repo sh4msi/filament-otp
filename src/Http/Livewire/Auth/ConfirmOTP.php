@@ -6,12 +6,17 @@ use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Notifications\Notification;
 use Filament\Pages\SimplePage;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\View;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Sh4msi\FilamentOtp\Events\TokenSent;
 use Sh4msi\FilamentOtp\FilamentOtp;
@@ -22,7 +27,7 @@ use Sh4msi\FilamentOtp\FilamentOtp;
 #[\AllowDynamicProperties]
 class ConfirmOTP extends SimplePage
 {
-    use \Filament\Forms\Concerns\InteractsWithForms;
+    use InteractsWithForms;
     use WithRateLimiting;
 
     protected string $view = 'filament-otp::livewire.confirm-otp';
@@ -36,7 +41,7 @@ class ConfirmOTP extends SimplePage
         }
 
         if (! session()->has('loginId')) {
-            to_route('filament.app.auth.login');
+            $this->redirect($this->getLoginUrl());
 
             return;
         }
@@ -44,14 +49,29 @@ class ConfirmOTP extends SimplePage
         $this->form->fill();
     }
 
+    public function getLoginUrl(): string
+    {
+        $panel = Filament::getCurrentOrDefaultPanel();
+
+        if ($panel && method_exists($panel, 'hasLogin') && $panel->hasLogin()) {
+            return $panel->getLoginUrl();
+        }
+
+        if (Route::has('filament-otp.login')) {
+            return route('filament-otp.login');
+        }
+
+        return url('/');
+    }
+
     protected function getFormSchema(): array
     {
-        $gridClass = class_exists(\Filament\Schemas\Components\Grid::class)
-            ? \Filament\Schemas\Components\Grid::class
+        $gridClass = class_exists(Grid::class)
+            ? Grid::class
             : 'Filament\Forms\Components\Grid';
 
-        $viewClass = class_exists(\Filament\Schemas\Components\View::class)
-            ? \Filament\Schemas\Components\View::class
+        $viewClass = class_exists(View::class)
+            ? View::class
             : 'Filament\Forms\Components\View';
 
         return [
@@ -87,10 +107,10 @@ class ConfirmOTP extends SimplePage
         if ($tokenExpiry < now()->timestamp) {
             $this->handleExpiredToken();
 
-            return to_route('filament.app.auth.login');
+            return $this->redirect($this->getLoginUrl());
         }
 
-        $this->hasValidToken($data['token']);
+        $this->hasValidToken((string) $data['token']);
         $user = app(FilamentOtp::class)->getUser();
         Filament::auth()->login($user);
         $this->clearSession(request());
@@ -105,7 +125,13 @@ class ConfirmOTP extends SimplePage
 
         session()->regenerate();
 
-        return app(LoginResponse::class);
+        $loginResponseClass = interface_exists(\Filament\Auth\Http\Responses\Contracts\LoginResponse::class)
+            ? \Filament\Auth\Http\Responses\Contracts\LoginResponse::class
+            : (interface_exists(LoginResponse::class)
+                ? LoginResponse::class
+                : LoginResponse::class);
+
+        return app($loginResponseClass);
     }
 
     /**
@@ -117,6 +143,13 @@ class ConfirmOTP extends SimplePage
         $this->dispatchCountdown();
 
         $user = app(FilamentOtp::class)->getUser();
+
+        if (! $user) {
+            $this->redirect($this->getLoginUrl());
+
+            return;
+        }
+
         event(new TokenSent($user));
 
         Notification::make()
@@ -124,7 +157,6 @@ class ConfirmOTP extends SimplePage
             ->seconds(12)
             ->success()
             ->send();
-
     }
 
     public function getTitle(): string | Htmlable
@@ -145,7 +177,7 @@ class ConfirmOTP extends SimplePage
                 config('filament-otp.rate_limit_decay_seconds', 60)
             );
         } catch (TooManyRequestsException $exception) {
-            $throttledKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.notifications.throttled.title')
+            $throttledKey = Lang::has('filament-panels::auth/pages/login.notifications.throttled.title')
                 ? 'filament-panels::auth/pages/login.notifications.throttled'
                 : 'filament-panels::pages/auth/login.notifications.throttled';
 
@@ -182,11 +214,11 @@ class ConfirmOTP extends SimplePage
                 config('filament-otp.rate_limit_decay_seconds', 60)
             );
         } catch (TooManyRequestsException $exception) {
-            $throttledBodyKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.notifications.throttled.body')
+            $throttledBodyKey = Lang::has('filament-panels::auth/pages/login.notifications.throttled.body')
                 ? 'filament-panels::auth/pages/login.notifications.throttled.body'
                 : 'filament-panels::pages/auth/login.notifications.throttled.body';
 
-            $throttledKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.notifications.throttled')
+            $throttledKey = Lang::has('filament-panels::auth/pages/login.notifications.throttled')
                 ? 'filament-panels::auth/pages/login.notifications.throttled'
                 : 'filament-panels::pages/auth/login.notifications.throttled';
 
@@ -225,7 +257,9 @@ class ConfirmOTP extends SimplePage
      */
     private function hasValidToken(string $token): void
     {
-        if ($token != session()->get('token')) {
+        $sessionToken = (string) session()->get('token');
+
+        if ($sessionToken === '' || ! hash_equals($sessionToken, $token)) {
             throw ValidationException::withMessages([
                 'token' => [__('filament-otp::validation.wrong_token')],
             ]);
@@ -246,9 +280,15 @@ class ConfirmOTP extends SimplePage
             ->send();
     }
 
-    private function clearSession($request): void
+    private function clearSession($request = null): void
     {
-        $request->session()->forget(['token', 'token_expiry']);
+        $keys = ['token', 'token_expiry', 'loginId'];
+
+        if ($request && method_exists($request, 'hasSession') && $request->hasSession()) {
+            $request->session()->forget($keys);
+        } else {
+            session()->forget($keys);
+        }
     }
 
     /**
@@ -256,7 +296,7 @@ class ConfirmOTP extends SimplePage
      */
     private function throwFailureValidationException()
     {
-        $failedKey = \Illuminate\Support\Facades\Lang::has('filament-panels::auth/pages/login.messages.failed')
+        $failedKey = Lang::has('filament-panels::auth/pages/login.messages.failed')
             ? 'filament-panels::auth/pages/login.messages.failed'
             : 'filament-panels::pages/auth/login.messages.failed';
 

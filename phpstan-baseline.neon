@@ -1,0 +1,36 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Class App\\\\Models\\\\User not found\\.$#"
+			count: 1
+			path: config/filament-otp.php
+
+		-
+			message: "#^Call to method fill\\(\\) on an unknown class Filament\\\\Forms\\\\Form\\.$#"
+			count: 1
+			path: src/Http/Livewire/Auth/ConfirmOTP.php
+
+		-
+			message: "#^Call to method getState\\(\\) on an unknown class Filament\\\\Forms\\\\Form\\.$#"
+			count: 1
+			path: src/Http/Livewire/Auth/ConfirmOTP.php
+
+		-
+			message: "#^Cannot call method session\\(\\) on class\\-string\\|object\\.$#"
+			count: 1
+			path: src/Http/Livewire/Auth/ConfirmOTP.php
+
+		-
+			message: "#^Class Filament\\\\Http\\\\Responses\\\\Auth\\\\Contracts\\\\LoginResponse not found\\.$#"
+			count: 1
+			path: src/Http/Livewire/Auth/ConfirmOTP.php
+
+		-
+			message: "#^Call to method fill\\(\\) on an unknown class Filament\\\\Forms\\\\Form\\.$#"
+			count: 1
+			path: src/Http/Livewire/Auth/LoginOTP.php
+
+		-
+			message: "#^Call to method getState\\(\\) on an unknown class Filament\\\\Forms\\\\Form\\.$#"
+			count: 1
+			path: src/Http/Livewire/Auth/LoginOTP.php

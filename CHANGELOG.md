@@ -2,6 +2,27 @@
 
 All notable changes to `filament-otp` will be documented in this file.
 
+## v3.0.0 - 2026-10-02
+
+### Added
+- Official support for **Filament v4** alongside **Filament v3**.
+- Dynamic `LoginResponse` contract resolution across Filament v3 and v4 namespaces.
+- Dynamic panel login route resolution in Livewire components (`getLoginUrl()`).
+- Comprehensive **Pest 3** test suite covering Unit, Feature, and Architecture tests (54 tests, 213 assertions).
+- Static analysis with **PHPStan** (level 4) and custom test fixtures.
+
+### Changed
+- Updated default OTP token length (`token_count`) from 5 to 6 digits.
+- Replaced `<x-filament-panels::form>` in Blade views with standard `<form wire:submit="authenticate">` for cross-version compatibility.
+- Decoupled `TokenListener` to depend on `TokenGeneratorInterface` contract instead of concrete implementation.
+- Upgraded dev dependencies (`pestphp/pest: ^3.0`, `orchestra/testbench: ^9.0 || ^10.0`).
+
+### Security
+- Migrated token generation from `mt_rand()` / `str_shuffle()` to CSPRNG `random_int()`.
+- Mitigated authentication bypass by enforcing timing-safe `hash_equals()` and strict non-empty session token validation.
+- Ensured complete session cleanup (`loginId`, `token`, `token_expiry`) post-authentication and within `TokenGuard`.
+- Added null-safe guards for authenticatable user instances during token resend operations.
+
 ## v2.0.0 - 2025-09-13
 
 support Laravel 11 and 12

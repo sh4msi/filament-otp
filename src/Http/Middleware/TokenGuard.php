@@ -50,7 +50,7 @@ class TokenGuard
 
     private function clearToken(Request $request): void
     {
-        $request->session()->forget(['token', 'token_expiry']);
+        $request->session()->forget(['token', 'token_expiry', 'loginId']);
     }
 
     private function isLoginRoute(Request $request): bool
