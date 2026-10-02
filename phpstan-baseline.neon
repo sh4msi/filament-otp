@@ -1,36 +1,67 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Class App\\\\Models\\\\User not found\\.$#"
+			message: '#^Class App\\Models\\User not found\.$#'
+			identifier: class.notFound
 			count: 1
 			path: config/filament-otp.php
 
 		-
-			message: "#^Call to method fill\\(\\) on an unknown class Filament\\\\Forms\\\\Form\\.$#"
+			message: '#^Call to function method_exists\(\) with Filament\\Panel and ''hasLogin'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/Http/Livewire/Auth/ConfirmOTP.php
 
 		-
-			message: "#^Call to method getState\\(\\) on an unknown class Filament\\\\Forms\\\\Form\\.$#"
+			message: '#^Call to method fill\(\) on an unknown class Filament\\Forms\\Form\.$#'
+			identifier: class.notFound
 			count: 1
 			path: src/Http/Livewire/Auth/ConfirmOTP.php
 
 		-
-			message: "#^Cannot call method session\\(\\) on class\\-string\\|object\\.$#"
+			message: '#^Call to method getState\(\) on an unknown class Filament\\Forms\\Form\.$#'
+			identifier: class.notFound
 			count: 1
 			path: src/Http/Livewire/Auth/ConfirmOTP.php
 
 		-
-			message: "#^Class Filament\\\\Http\\\\Responses\\\\Auth\\\\Contracts\\\\LoginResponse not found\\.$#"
+			message: '#^Cannot call method session\(\) on class\-string\|object\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: src/Http/Livewire/Auth/ConfirmOTP.php
 
 		-
-			message: "#^Call to method fill\\(\\) on an unknown class Filament\\\\Forms\\\\Form\\.$#"
+			message: '#^Class Filament\\Http\\Responses\\Auth\\Contracts\\LoginResponse not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Livewire/Auth/ConfirmOTP.php
+
+		-
+			message: '#^PHPDoc tag @property for property Sh4msi\\FilamentOtp\\Http\\Livewire\\Auth\\ConfirmOTP\:\:\$form contains unknown class Filament\\Forms\\Form\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Livewire/Auth/ConfirmOTP.php
+
+		-
+			message: '#^Call to method fill\(\) on an unknown class Filament\\Forms\\Form\.$#'
+			identifier: class.notFound
 			count: 1
 			path: src/Http/Livewire/Auth/LoginOTP.php
 
 		-
-			message: "#^Call to method getState\\(\\) on an unknown class Filament\\\\Forms\\\\Form\\.$#"
+			message: '#^Call to method getState\(\) on an unknown class Filament\\Forms\\Form\.$#'
+			identifier: class.notFound
 			count: 1
 			path: src/Http/Livewire/Auth/LoginOTP.php
+
+		-
+			message: '#^PHPDoc tag @property for property Sh4msi\\FilamentOtp\\Http\\Livewire\\Auth\\LoginOTP\:\:\$form contains unknown class Filament\\Forms\\Form\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Livewire/Auth/LoginOTP.php
+
+		-
+			message: '#^Trait Sh4msi\\FilamentOtp\\Traits\\OtpLogin is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Traits/OtpLogin.php
