@@ -29,6 +29,8 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
+        \Illuminate\Support\Facades\Notification::fake();
+
         Filament::setCurrentPanel(Filament::getPanel('app'));
 
         $this->setUpDatabase();
