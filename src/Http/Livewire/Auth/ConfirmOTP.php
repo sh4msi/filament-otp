@@ -30,9 +30,12 @@ class ConfirmOTP extends SimplePage
     use InteractsWithForms;
     use WithRateLimiting;
 
-    protected string $view = 'filament-otp::livewire.confirm-otp';
-
     public $token = '';
+
+    public function getView(): string
+    {
+        return 'filament-otp::livewire.confirm-otp';
+    }
 
     public function mount(): void
     {
