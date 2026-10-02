@@ -54,7 +54,11 @@ class ConfirmOTP extends SimplePage
 
     public function getLoginUrl(): string
     {
-        $panel = Filament::getCurrentOrDefaultPanel();
+        try {
+            $panel = Filament::getCurrentPanel() ?? Filament::getDefaultPanel();
+        } catch (\Throwable) {
+            $panel = null;
+        }
 
         if ($panel && method_exists($panel, 'hasLogin') && $panel->hasLogin()) {
             return $panel->getLoginUrl();
