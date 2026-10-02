@@ -15,6 +15,7 @@ use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Schema;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -29,7 +30,7 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        \Illuminate\Support\Facades\Notification::fake();
+        Notification::fake();
 
         Filament::setCurrentPanel(Filament::getPanel('app'));
 
