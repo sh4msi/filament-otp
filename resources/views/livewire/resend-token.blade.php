@@ -5,34 +5,43 @@
     </x-filament::button>
 
     <script>
-        document.addEventListener('livewire:initialized', () => {
+        const registerCountdownListener = () => {
             Livewire.on('startCountdown', function (duration) {
-                let timer = duration, minutes, seconds;
+                let timer = Array.isArray(duration) ? duration[0] : (typeof duration === 'object' && duration !== null && 'duration' in duration ? duration.duration : duration);
                 let element = document.getElementById('countdown');
+                if (!element) return;
+                let resendLabel = {{ \Illuminate\Support\Js::from(__('filament-otp::filament-otp.confirm.buttons.resend.label')) }};
 
                 function formatTime(time) {
                     return time < 10 ? "0" + time : time;
                 }
 
+                let countdown = null;
                 function updateCountdown() {
-                    minutes = parseInt(timer / 60, 10);
-                    seconds = parseInt(timer % 60, 10);
+                    let minutes = parseInt(timer / 60, 10);
+                    let seconds = parseInt(timer % 60, 10);
 
                     element.textContent = formatTime(minutes) + ":" + formatTime(seconds);
                     element.setAttribute('disabled', '');
 
                     if (--timer < 0) {
-                        clearInterval(countdown);
-                        element.textContent = 'ارسال مجدد';
+                        if (countdown) clearInterval(countdown);
+                        element.textContent = resendLabel;
                         element.removeAttribute('disabled');
                     }
                 }
 
                 updateCountdown();
-                let countdown = setInterval(updateCountdown, 1000);
+                countdown = setInterval(updateCountdown, 1000);
             });
+        };
 
-        });
+        if (window.Livewire) {
+            registerCountdownListener();
+        } else {
+            document.addEventListener('livewire:init', registerCountdownListener);
+            document.addEventListener('livewire:initialized', registerCountdownListener);
+        }
     </script>
 
 </div>

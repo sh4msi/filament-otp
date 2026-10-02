@@ -2,6 +2,19 @@
 
 All notable changes to `filament-otp` will be documented in this file.
 
+## v4.0.0 - 2026-10-03
+
+### Added
+- Official support for **Filament v5** alongside Filament v3 and v4.
+- Support for `livewire:init` and `window.Livewire` in countdown timer for SPA navigation and Livewire 4 compatibility.
+
+### Changed
+- Normalized event payload handling in `resend-token` component for Livewire 4.
+- Localized countdown resend button state using package translation keys.
+
+### Fixed
+- Removed trailing comment syntax artifact in `login-otp-btn.blade.php`.
+
 ## v3.0.1 - 2026-10-02
 
 ### Fixed
