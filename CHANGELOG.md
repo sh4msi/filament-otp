@@ -2,6 +2,13 @@
 
 All notable changes to `filament-otp` will be documented in this file.
 
+## v3.0.1 - 2026-10-02
+
+### Fixed
+- Fixed Filament v3 compatibility by overriding `getView()` method instead of `$view` property.
+- Fixed panel resolution across Filament v3 and v4 using `getCurrentPanel()` and `getDefaultPanel()`.
+- Removed unused `spatie/laravel-ray` dependency and faked notifications in test setup.
+
 ## v3.0.0 - 2026-10-02
 
 ### Added
