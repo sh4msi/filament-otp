@@ -2,6 +2,11 @@
 
 All notable changes to `filament-otp` will be documented in this file.
 
+## v4.1.0 - 2026-10-03
+
+### Added
+- Official support for **Laravel 13** alongside Laravel 11 and 12.
+
 ## v4.0.0 - 2026-10-03
 
 ### Added
