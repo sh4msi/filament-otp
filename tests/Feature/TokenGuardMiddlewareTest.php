@@ -77,5 +77,5 @@ it('redirects to confirm route when token is valid but accessed route is not a l
         return response('should_not_reach');
     });
 
-    expect($response->isRedirect(route('filament-otp.confirm')))->toBeTrue();
+    expect($response->isRedirect(route('filament-otp.app.confirm')))->toBeTrue();
 });

@@ -5,6 +5,8 @@ namespace Sh4msi\FilamentOtp\Http\Middleware;
 use Closure;
 use Filament\Facades\Filament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Sh4msi\FilamentOtp\Facades\FilamentOtp;
 
 class TokenGuard
 {
@@ -33,7 +35,18 @@ class TokenGuard
             return $next($request);
         }
 
-        return to_route('filament-otp.confirm');
+        $panel = Filament::getCurrentPanel() ?? Filament::getDefaultPanel();
+        $confirmRoute = "filament-otp.{$panel->getId()}.confirm";
+
+        if (Route::has($confirmRoute)) {
+            return to_route($confirmRoute);
+        }
+
+        if (Route::has('filament-otp.confirm')) {
+            return to_route('filament-otp.confirm');
+        }
+
+        return redirect()->to(FilamentOtp::getConfirmUrl());
     }
 
     private function getTokenFromSession(Request $request)
@@ -55,7 +68,6 @@ class TokenGuard
 
     private function isLoginRoute(Request $request): bool
     {
-        return $request->route()->named('filament-otp.*');
-        //        return $request->route()->named('filament.*.auth.login.*');
+        return (bool) $request->route()?->named('filament-otp.*');
     }
 }

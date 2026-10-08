@@ -33,6 +33,14 @@ This is the contents of the published config file:
 ```php
 return [
     /**
+     * The panel IDs where Filament OTP routes should be registered.
+     * When set to null, routes will be registered for panels that have the FilamentOtpPlugin installed,
+     * or for all panels if no panel explicitly registered the plugin.
+     * Example: ['app', 'admin']
+     */
+    'panels' => null,
+
+    /**
      * The authentication model to use.
      */
     'user_model' => \App\Models\User::class,
@@ -112,25 +120,47 @@ class User extends Authenticatable
 }
 ```
 
-You can use the renderHook() method in the panel configuration object to display the "login with one-time password" button on the login page.
+Register the plugin and optional login button hook in your Panel provider (e.g. `AppPanelProvider.php`):
 ```php
 use Filament\Panel;
 use Illuminate\Contracts\View\View;
- 
+use Sh4msi\FilamentOtp\FilamentOtpPlugin;
+
 public function panel(Panel $panel): Panel
 {
     return $panel
         // ...
+        ->plugin(FilamentOtpPlugin::make())
         ->renderHook(
             'panels::auth.login.form.after',
-            fn (): View => View('filament-otp::livewire.login-otp-btn'),
-        )
+            fn (): View => view('filament-otp::livewire.login-otp-btn'),
+        );
 }
 ```
 
-OR call by route
+OR navigate directly via route or helper facade:
 ```php
-route('filament-otp.login')
+// Route name scoped by panel ID:
+route('filament-otp.' . Filament::getCurrentPanel()->getId() . '.login')
+
+// Or helper methods (auto-resolves current active panel):
+\Sh4msi\FilamentOtp\Facades\FilamentOtp::getLoginUrl()
+\Sh4msi\FilamentOtp\Facades\FilamentOtp::getConfirmUrl()
+```
+
+### Multi-Panel Support
+
+The package natively isolates OTP routes per panel using each panel's ID (`filament-otp.{panelId}.login` and `filament-otp.{panelId}.confirm`), preventing route name collisions during `route:cache` serialization.
+
+By default, routes are registered for all panels that have `FilamentOtpPlugin::make()` registered.
+
+You can also explicitly define allowed panels in `config/filament-otp.php`:
+```php
+// Only register OTP routes for specific panels:
+'panels' => ['app'],
+
+// Or set to null to automatically register on all panels that include FilamentOtpPlugin:
+'panels' => null,
 ```
 
 

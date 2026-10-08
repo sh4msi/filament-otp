@@ -59,7 +59,7 @@ it('stores loginId in session, fires TokenSent event and redirects on success', 
         ->fillForm(['loginId' => 'alice@example.com'])
         ->call('authenticate')
         ->assertHasNoFormErrors()
-        ->assertRedirect(route('filament-otp.confirm'));
+        ->assertRedirect(route('filament-otp.app.confirm'));
 
     expect(Session::get('loginId'))->toBe('alice@example.com');
 

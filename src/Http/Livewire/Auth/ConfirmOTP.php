@@ -64,6 +64,10 @@ class ConfirmOTP extends SimplePage
             return $panel->getLoginUrl();
         }
 
+        if ($panel && Route::has("filament-otp.{$panel->getId()}.login")) {
+            return route("filament-otp.{$panel->getId()}.login");
+        }
+
         if (Route::has('filament-otp.login')) {
             return route('filament-otp.login');
         }

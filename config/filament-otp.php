@@ -10,6 +10,14 @@ use Sh4msi\FilamentOtp\Utility\TokenGenerator;
 
 return [
     /**
+     * The panel IDs where Filament OTP routes should be registered.
+     * When set to null, routes will be registered for panels that have the FilamentOtpPlugin installed,
+     * or for all panels if no panel explicitly registered the plugin.
+     * Example: ['app', 'admin']
+     */
+    'panels' => null,
+
+    /**
      * The authentication model to use.
      */
     'user_model' => User::class,

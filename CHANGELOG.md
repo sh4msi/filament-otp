@@ -2,6 +2,20 @@
 
 All notable changes to `filament-otp` will be documented in this file.
 
+## v4.2.0 - 2026-10-08
+
+### Added
+- Multi-panel support with panel-scoped route names (`filament-otp.{panelId}.login` and `filament-otp.{panelId}.confirm`).
+- Configurable `'panels'` option in `config/filament-otp.php` to restrict OTP routes to designated panel IDs.
+- Automatic panel detection via `FilamentOtpPlugin` registration (`$panel->hasPlugin('filament-otp')`).
+- Helper methods on `FilamentOtp` service and facade: `getLoginUrl()`, `getConfirmUrl()`, `getLoginRouteName()`, `getConfirmRouteName()`, and `getCurrentPanelId()`.
+- Multi-panel route registration and serialization test suite (`tests/Feature/MultiPanelRoutesTest.php`).
+
+### Fixed
+- Fixed route serialization collision (`Unable to prepare route [login/otp/confirm] for serialization. Another route has already been assigned name [filament-otp.confirm]`) when multiple panels are present.
+- Dynamically resolved redirect targets in `LoginOTP`, `ConfirmOTP`, and `TokenGuard` based on the current Filament panel.
+- Updated `login-otp-btn.blade.php` to dynamically link to the current panel's OTP login route.
+
 ## v4.1.0 - 2026-10-03
 
 ### Added

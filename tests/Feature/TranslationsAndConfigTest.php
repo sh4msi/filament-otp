@@ -17,6 +17,7 @@ it('has all expected default configuration keys', function () {
         'token_notification',
         'confirm_token_component',
         'login_otp_component',
+        'panels',
     ]);
 });
 

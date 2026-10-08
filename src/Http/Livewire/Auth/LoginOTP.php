@@ -12,6 +12,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\SimplePage;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Sh4msi\FilamentOtp\Events\TokenSent;
 use Sh4msi\FilamentOtp\FilamentOtp;
@@ -64,7 +65,18 @@ class LoginOTP extends SimplePage
             ->success()
             ->send();
 
-        return to_route('filament-otp.confirm');
+        $panel = Filament::getCurrentPanel() ?? Filament::getDefaultPanel();
+        $confirmRoute = "filament-otp.{$panel->getId()}.confirm";
+
+        if (Route::has($confirmRoute)) {
+            return to_route($confirmRoute);
+        }
+
+        if (Route::has('filament-otp.confirm')) {
+            return to_route('filament-otp.confirm');
+        }
+
+        return redirect()->to(app(FilamentOtp::class)->getConfirmUrl());
     }
 
     protected function getFormSchema(): array
