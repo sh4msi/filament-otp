@@ -40,7 +40,7 @@ class FilamentOtp
         try {
             $panel = Filament::getCurrentPanel() ?? Filament::getDefaultPanel();
 
-            return $panel->getId();
+            return $panel?->getId();
         } catch (\Throwable) {
             return null;
         }
